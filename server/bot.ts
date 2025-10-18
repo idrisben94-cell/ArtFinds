@@ -11,6 +11,10 @@ import {
 import { storage } from './storage';
 import { onePieceCharacters, type GameSession, type OnePieceCharacter } from '@shared/schema';
 
+// ✅ Test pour vérifier que le bot se lance
+console.log("⚡️ Bot starting…");
+
+
 function getRandomCharacter(): OnePieceCharacter {
   return onePieceCharacters[Math.floor(Math.random() * onePieceCharacters.length)];
 }
