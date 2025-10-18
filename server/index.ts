@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { startBot } from "./bot";
 
 const app = express();
 app.use(express.json());
@@ -68,4 +69,13 @@ app.use((req, res, next) => {
   }, () => {
     log(`serving on port ${port}`);
   });
+
+  // Start Discord bot
+  try {
+    log('🤖 Démarrage du bot Discord...');
+    await startBot();
+    log('✅ Bot Discord démarré avec succès !');
+  } catch (error) {
+    log(`❌ Erreur lors du démarrage du bot: ${error}`);
+  }
 })();
