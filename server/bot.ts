@@ -1,4 +1,13 @@
-import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, Message } from 'discord.js';
+import { 
+  Client, 
+  GatewayIntentBits, 
+  REST, 
+  Routes, 
+  SlashCommandBuilder, 
+  EmbedBuilder, 
+  Message,
+  GuildMember
+} from 'discord.js';
 import { storage } from './storage';
 import { onePieceCharacters, type GameSession, type OnePieceCharacter } from '@shared/schema';
 
@@ -13,7 +22,6 @@ function normalizeAnswer(answer: string): string {
 
 function checkAnswer(answer: string, character: OnePieceCharacter): boolean {
   const normalized = normalizeAnswer(answer);
-  // Check against canonical name first, then aliases
   if (normalizeAnswer(character.name) === normalized) {
     return true;
   }
@@ -22,11 +30,11 @@ function checkAnswer(answer: string, character: OnePieceCharacter): boolean {
 
 export async function startBot() {
   const token = process.env.DISCORD_BOT_TOKEN;
-  
+
   if (!token) {
     throw new Error('DISCORD_BOT_TOKEN non configuré. Veuillez ajouter votre token de bot Discord.');
   }
-  
+
   const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -35,10 +43,10 @@ export async function startBot() {
     ]
   });
 
-  // Register slash commands
+  // === Register slash commands ===
   client.once('ready', async () => {
     console.log(`✅ Bot connecté en tant que ${client.user?.tag}`);
-    
+
     const commands = [
       new SlashCommandBuilder()
         .setName('prime')
@@ -63,7 +71,7 @@ export async function startBot() {
 
     try {
       console.log('🔄 Enregistrement des commandes slash...');
-      
+
       if (client.application) {
         await rest.put(
           Routes.applicationCommands(client.application.id),
@@ -76,15 +84,16 @@ export async function startBot() {
     }
   });
 
-  // Handle /prime command
+  // === Handle / Commands ===
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
+    const userId = interaction.user.id;
+    const channelId = interaction.channelId;
+    const guildMember = interaction.member as GuildMember;
+    const username = guildMember?.nickname || interaction.user.username;
 
+    // --- /prime ---
     if (interaction.commandName === 'prime') {
-      const userId = interaction.user.id;
-      const channelId = interaction.channelId;
-
-      // Check if user already has an active game
       const existingSession = await storage.getGameSession(userId, channelId);
       if (existingSession) {
         await interaction.reply({
@@ -94,7 +103,6 @@ export async function startBot() {
         return;
       }
 
-      // Start new game
       const character = getRandomCharacter();
       const session: GameSession = {
         userId,
@@ -116,10 +124,8 @@ export async function startBot() {
       await interaction.reply({ embeds: [embed] });
     }
 
+    // --- /abandon ---
     if (interaction.commandName === 'abandon') {
-      const userId = interaction.user.id;
-      const channelId = interaction.channelId;
-
       const session = await storage.getGameSession(userId, channelId);
       if (!session) {
         await interaction.reply({
@@ -129,18 +135,12 @@ export async function startBot() {
         return;
       }
 
-      // Update user score for abandoned game
       let userScore = await storage.getUserScore(userId);
       if (!userScore) {
-        userScore = {
-          userId,
-          username: interaction.user.username,
-          correctGuesses: 0,
-          totalGames: 0
-        };
+        userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
       }
       userScore.totalGames++;
-      userScore.username = interaction.user.username;
+      userScore.username = username;
       await storage.updateUserScore(userScore);
 
       await storage.deleteGameSession(userId, channelId);
@@ -154,13 +154,12 @@ export async function startBot() {
       await interaction.reply({ embeds: [embed] });
     }
 
+    // --- /score ---
     if (interaction.commandName === 'score') {
       const type = interaction.options.getString('type') || 'me';
-      const userId = interaction.user.id;
 
       if (type === 'me') {
         const userScore = await storage.getUserScore(userId);
-        
         if (!userScore || userScore.totalGames === 0) {
           await interaction.reply({
             content: '📊 Tu n\'as pas encore joué ! Utilise `/prime` pour commencer.',
@@ -169,26 +168,18 @@ export async function startBot() {
           return;
         }
 
-        const successRate = Math.round((userScore.correctGuesses / userScore.totalGames) * 100);
-        const fastestTimeText = userScore.fastestTime 
-          ? `${(userScore.fastestTime / 1000).toFixed(1)}s`
-          : 'N/A';
-
         const embed = new EmbedBuilder()
           .setColor(0x3498DB)
-          .setTitle(`📊 Score de ${userScore.username}`)
+          .setTitle(`📊 Score de ${username}`)
           .addFields(
             { name: '✅ Bonnes réponses', value: `${userScore.correctGuesses}`, inline: true },
-            { name: '🎮 Parties jouées', value: `${userScore.totalGames}`, inline: true },
-            { name: '📈 Taux de réussite', value: `${successRate}%`, inline: true },
-            { name: '⚡ Temps le plus rapide', value: fastestTimeText, inline: true }
+            { name: '🎮 Parties jouées', value: `${userScore.totalGames}`, inline: true }
           )
           .setTimestamp();
 
         await interaction.reply({ embeds: [embed] });
       } else {
         const topScores = await storage.getTopScores(10);
-        
         if (topScores.length === 0) {
           await interaction.reply({
             content: '📊 Aucun score pour le moment ! Soyez le premier à jouer !',
@@ -199,8 +190,7 @@ export async function startBot() {
 
         const leaderboardText = topScores.map((score, index) => {
           const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-          const successRate = Math.round((score.correctGuesses / score.totalGames) * 100);
-          return `${medal} **${score.username}** - ${score.correctGuesses} victoires (${successRate}%)`;
+          return `${medal} **${score.username}** - ${score.correctGuesses} victoires`;
         }).join('\n');
 
         const embed = new EmbedBuilder()
@@ -214,39 +204,30 @@ export async function startBot() {
     }
   });
 
-  // Handle message responses
+  // === Handle messages ===
   client.on('messageCreate', async (message: Message) => {
-    // Ignore bot messages
     if (message.author.bot) return;
 
     const userId = message.author.id;
     const channelId = message.channelId;
-
-    // Check if user has an active game session
+    const username = message.member?.nickname || message.author.username;
     const session = await storage.getGameSession(userId, channelId);
     if (!session) return;
 
     session.attempts++;
 
-    // Check if answer is correct
     if (checkAnswer(message.content, session.currentCharacter)) {
       const timeTaken = Date.now() - session.startTime;
-      
-      // Update user score
+
       let userScore = await storage.getUserScore(userId);
       if (!userScore) {
-        userScore = {
-          userId,
-          username: message.author.username,
-          correctGuesses: 0,
-          totalGames: 0
-        };
+        userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
       }
 
       userScore.correctGuesses++;
       userScore.totalGames++;
-      userScore.username = message.author.username; // Update username in case it changed
-      
+      userScore.username = username;
+
       if (!userScore.fastestTime || timeTaken < userScore.fastestTime) {
         userScore.fastestTime = timeTaken;
       }
@@ -259,7 +240,6 @@ export async function startBot() {
         .setTitle('🎉 Bravo ! Réponse correcte !')
         .setDescription(`C'était bien **${session.currentCharacter.name}** avec une prime de **${session.currentCharacter.bountyText} Berry** !`)
         .addFields(
-          { name: '⏱️ Temps', value: `${(timeTaken / 1000).toFixed(1)}s`, inline: true },
           { name: '🎯 Tentatives', value: `${session.attempts}`, inline: true },
           { name: '📊 Ton score', value: `${userScore.correctGuesses}/${userScore.totalGames} victoires`, inline: true }
         )
@@ -268,19 +248,16 @@ export async function startBot() {
 
       await message.reply({ embeds: [embed] });
     } else {
-      // Wrong answer
-      const hintsThreshold = [3, 5, 7];
+      const hintsThreshold = [2, 4, 5];
       let hint = '';
 
       if (session.attempts === hintsThreshold[0]) {
-        const nameLength = session.currentCharacter.name.length;
-        hint = `💡 Indice : Le nom du personnage contient ${nameLength} lettres.`;
+        hint = `💡 Indice : Le nom du personnage contient ${session.currentCharacter.name.length} lettres.`;
       } else if (session.attempts === hintsThreshold[1]) {
-        const firstLetter = session.currentCharacter.name[0];
-        hint = `💡 Indice : Le nom commence par "${firstLetter}".`;
+        hint = `💡 Indice : Le nom commence par "${session.currentCharacter.name[0]}".`;
       } else if (session.attempts === hintsThreshold[2]) {
-        const nameParts = session.currentCharacter.name.split(' ');
-        hint = `💡 Indice : Le nom contient ${nameParts.length} mot${nameParts.length > 1 ? 's' : ''}.`;
+        const parts = session.currentCharacter.name.split(' ');
+        hint = `💡 Indice : Le nom contient ${parts.length} mot${parts.length > 1 ? 's' : ''}.`;
       }
 
       const responses = [
@@ -291,12 +268,11 @@ export async function startBot() {
       ];
 
       const response = responses[Math.floor(Math.random() * responses.length)];
-      const replyText = hint ? `${response}\n${hint}` : response;
-
-      await message.reply(replyText);
+      await message.reply(hint ? `${response}\n${hint}` : response);
     }
   });
 
   await client.login(token);
   return client;
 }
+

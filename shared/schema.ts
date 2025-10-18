@@ -28,31 +28,31 @@ export interface UserScore {
 export const onePieceCharacters: OnePieceCharacter[] = [
   {
     id: "luffy",
-    name: "Monkey D. Luffy",
+    name: "Monkey D. Luffy, Trafalgar D. Water Law et Eustass Kid",
     bounty: 3000000000,
     bountyText: "3,000,000,000",
-    aliases: ["luffy", "mugiwara", "chapeau de paille"]
+    aliases: ["luffy", "mugiwara", "chapeau de paille", "law", "trafalgar", "trafalgar d law", "water law", "water", "trafalgar law", "trafalgar d water law", "kid", "eustass kid", "captain kid", "kidd", "eustass kidd"]
   },
   {
     id: "zoro",
     name: "Roronoa Zoro",
     bounty: 1111000000,
     bountyText: "1,111,000,000",
-    aliases: ["zoro", "roronoa"]
+    aliases: ["zoro", "roronoa", "roronoa zoro"]
   },
   {
     id: "sanji",
     name: "Vinsmoke Sanji",
     bounty: 1032000000,
     bountyText: "1,032,000,000",
-    aliases: ["sanji", "vinsmoke", "jambe noir"]
+    aliases: ["sanji", "vinsmoke", "jambe noir", "vinsmoke sanji"]
   },
   {
     id: "jinbe",
     name: "Jinbe",
     bounty: 1100000000,
     bountyText: "1,100,000,000",
-    aliases: ["jinbe", "jinbei"]
+    aliases: ["jinbe", "jinbei", "jimbe", "jimbei"]
   },
   {
     id: "nami",
@@ -66,14 +66,14 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     name: "Usopp",
     bounty: 500000000,
     bountyText: "500,000,000",
-    aliases: ["usopp", "god usopp", "sogeking"]
+    aliases: ["usopp", "god usopp", "sogeking", "goat"]
   },
   {
     id: "robin",
     name: "Nico Robin",
     bounty: 930000000,
     bountyText: "930,000,000",
-    aliases: ["robin", "nico robin"]
+    aliases: ["robin", "nico robin", "nico"]
   },
   {
     id: "franky",
@@ -97,25 +97,11 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     aliases: ["chopper", "tony tony chopper"]
   },
   {
-    id: "law",
-    name: "Trafalgar D. Water Law",
-    bounty: 3000000000,
-    bountyText: "3,000,000,000",
-    aliases: ["law", "trafalgar"]
-  },
-  {
-    id: "kid",
-    name: "Eustass Kid",
-    bounty: 3000000000,
-    bountyText: "3,000,000,000",
-    aliases: ["kid", "eustass kid", "captain kid"]
-  },
-  {
     id: "kaido",
     name: "Kaido",
     bounty: 4611100000,
     bountyText: "4,611,100,000",
-    aliases: ["kaido", "kaido des cent bêtes"]
+    aliases: ["kaido"]
   },
   {
     id: "bigmom",
@@ -143,7 +129,7 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     name: "Marshall D. Teach",
     bounty: 3996000000,
     bountyText: "3,996,000,000",
-    aliases: ["blackbeard", "barbe noire", "teach", "marshall d teach"]
+    aliases: ["blackbeard", "barbe noire", "teach", "marshall d. teach"]
   },
   {
     id: "crocodile",
@@ -157,21 +143,21 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     name: "Boa Hancock",
     bounty: 1659000000,
     bountyText: "1,659,000,000",
-    aliases: ["hancock", "boa hancock"]
+    aliases: ["hancock", "boa hancock", "boa"]
   },
   {
     id: "buggy",
     name: "Buggy",
     bounty: 3189000000,
     bountyText: "3,189,000,000",
-    aliases: ["buggy", "buggy le clown"]
+    aliases: ["buggy", "buggy le clown", "clown d buggy"]
   },
   {
     id: "ace",
-    name: "Portgas D. Ace",
+    name: "Portgas D. Ace et Little Oars Jr",
     bounty: 550000000,
     bountyText: "550,000,000",
-    aliases: ["ace", "portgas d ace", "fire fist", "poing ardent"]
+    aliases: ["ace", "portgas d ace", "fire fist", "poing ardent", "oz", "little oz", "little oars", "little oars jr"]
   },
   {
     id: "sabo",
@@ -199,7 +185,7 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     name: "Queen",
     bounty: 1320000000,
     bountyText: "1,320,000,000",
-    aliases: ["queen"]
+    aliases: ["queen", "scien"]
   },
   {
     id: "jack",
@@ -223,60 +209,25 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     aliases: ["doflamingo", "donquixote doflamingo", "joker"]
   },
   {
-    id: "smoker",
-    name: "Smoker",
-    bounty: 0,
-    bountyText: "Aucune (Marine)",
-    aliases: ["smoker"]
-  },
-  {
-    id: "oden",
-    name: "Kozuki Oden",
-    bounty: 0,
-    bountyText: "Inconnue",
-    aliases: ["oden", "kozuki oden"]
-  },
-  {
-    id: "yamato",
-    name: "Yamato",
-    bounty: 0,
-    bountyText: "Inconnue",
-    aliases: ["yamato"]
-  },
-  {
     id: "killer",
-    name: "Killer",
+    name: "Killer et Bartolomeo",
     bounty: 200000000,
     bountyText: "200,000,000",
-    aliases: ["killer", "massacre soldier"]
+    aliases: ["killer", "massacre soldier", "barto", "bartolomeo"]
   },
   {
     id: "bege",
-    name: "Capone Bege",
+    name: "Capone Bege et Scratchmen Apoo",
     bounty: 350000000,
     bountyText: "350,000,000",
-    aliases: ["bege", "capone bege", "capone"]
+    aliases: ["bege", "capone bege", "capone", "apoo", "scratchmen apoo"]
   },
   {
     id: "bonney",
-    name: "Jewelry Bonney",
+    name: "Jewelry Bonney, Basil Hawkins et Gecko Moria",
     bounty: 320000000,
     bountyText: "320,000,000",
-    aliases: ["bonney", "jewelry bonney"]
-  },
-  {
-    id: "hawkins",
-    name: "Basil Hawkins",
-    bounty: 320000000,
-    bountyText: "320,000,000",
-    aliases: ["hawkins", "basil hawkins"]
-  },
-  {
-    id: "apoo",
-    name: "Scratchmen Apoo",
-    bounty: 350000000,
-    bountyText: "350,000,000",
-    aliases: ["apoo", "scratchmen apoo"]
+    aliases: ["bonney", "jewelry bonney", "hawkins", "basil hawkins", "basil", "moria", "gecko moria", "kozuki moria"]
   },
   {
     id: "drake",
@@ -284,20 +235,6 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     bounty: 222000000,
     bountyText: "222,000,000",
     aliases: ["drake", "x drake", "diez drake"]
-  },
-  {
-    id: "benn",
-    name: "Benn Beckman",
-    bounty: 0,
-    bountyText: "Inconnue",
-    aliases: ["benn beckman", "beckman"]
-  },
-  {
-    id: "rayleigh",
-    name: "Silvers Rayleigh",
-    bounty: 0,
-    bountyText: "Inconnue (Ancienne)",
-    aliases: ["rayleigh", "silvers rayleigh", "dark king"]
   },
   {
     id: "whitebeard",
@@ -321,20 +258,6 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     aliases: ["kuma", "bartholomew kuma"]
   },
   {
-    id: "moria",
-    name: "Gecko Moria",
-    bounty: 320000000,
-    bountyText: "320,000,000",
-    aliases: ["moria", "gecko moria"]
-  },
-  {
-    id: "perona",
-    name: "Perona",
-    bounty: 0,
-    bountyText: "Inconnue",
-    aliases: ["perona"]
-  },
-  {
     id: "bepo",
     name: "Bepo",
     bounty: 500,
@@ -342,31 +265,136 @@ export const onePieceCharacters: OnePieceCharacter[] = [
     aliases: ["bepo"]
   },
   {
-    id: "carrot",
-    name: "Carrot",
-    bounty: 0,
-    bountyText: "Inconnue",
-    aliases: ["carrot"]
-  },
-  {
-    id: "vivi",
-    name: "Nefertari Vivi",
-    bounty: 0,
-    bountyText: "Aucune",
-    aliases: ["vivi", "nefertari vivi", "princesse vivi"]
-  },
-  {
-    id: "bartolomeo",
-    name: "Bartolomeo",
-    bounty: 200000000,
-    bountyText: "200,000,000",
-    aliases: ["bartolomeo", "bartolomeo le cannibale"]
-  },
-  {
     id: "cavendish",
-    name: "Cavendish",
+    name: "Cavendish et Pekoms",
     bounty: 330000000,
     bountyText: "330,000,000",
-    aliases: ["cavendish", "hakuba"]
+    aliases: ["cavendish", "hakuba", "pekoms"]
+  },
+  {
+    id: "loki",
+    name: "Loki",
+    bounty: 2600000000,
+    bountyText: "2,600,000,000",
+    aliases: ["loki"]
+  },
+  {
+    id: "dorry",
+    name: "Dorry et Brogy",
+    bounty: 1800000000,
+    bountyText: "1,800,000,000",
+    aliases: ["dorry", "brogy", "dorry et brogy"]
+  },
+  {
+    id: "cracker",
+    name: "Charlotte Cracker",
+    bounty: 860000000,
+    bountyText: "860,000,000",
+    aliases: ["cracker", "charlotte cracker"]
+  },
+  {
+    id: "perospero",
+    name: "Charlotte Perospero",
+    bounty: 700000000,
+    bountyText: "700,000,000",
+    aliases: ["perospero", "charlotte perospero"]
+  },
+  {
+    id: "smoothie",
+    name: "Charlotte Smoothie",
+    bounty: 930000000,
+    bountyText: "930,000,000",
+    aliases: ["smoothie", "charlotte smoothie"]
+  },
+  {
+    id: "urouge",
+    name: "Urouge",
+    bounty: 108000000,
+    bountyText: "108,000,000",
+    aliases: ["urouge"]
+  },
+  {
+    id: "chinjao",
+    name: "Don Chinjao",
+    bounty: 542000000,
+    bountyText: "542,000,000",
+    aliases: ["chinjao", "don chinjao"]
+  },
+  {
+    id: "izo",
+    name: "Izo",
+    bounty: 510000000,
+    bountyText: "510,000,000",
+    aliases: ["izo", "izou"]
+  },
+  {
+    id: "whos_who",
+    name: "Who's-Who",
+    bounty: 546000000,
+    bountyText: "546,000,000",
+    aliases: ["who's who", "whos-who"]
+  },
+  {
+    id: "snack",
+    name: "Charlotte Snack",
+    bounty: 600000000,
+    bountyText: "600,000,000",
+    aliases: ["snack"]
+  },
+  {
+    id: "edward_weevil",
+    name: "Edward Weevil et Black Maria",
+    bounty: 480000000,
+    bountyText: "480,000,000",
+    aliases: ["weevil", "edward weevil","weeble", "edward weeble", "black maria", "maria"]
+  },
+  {
+    id: "sasaki",
+    name: "Sasaki",
+    bounty: 472000000,
+    bountyText: "472,000,000",
+    aliases: ["sasaki"]
+  },
+  {
+    id: "belo_betty",
+    name: "Belo Betty",
+    bounty: 457000000,
+    bountyText: "457,000,000",
+    aliases: ["betty", "belo betty"]
+  },
+  {
+    id: "tamago",
+    name: "Tamago",
+    bounty: 429000000,
+    bountyText: "429,000,000",
+    aliases: ["tamago"]
+  },
+  {
+    id: "pedro",
+    name: "Pedro",
+    bounty: 382000000,
+    bountyText: "382,000,000",
+    aliases: ["pedro"]
+  },
+  {
+    id: "lindbergh",
+    name: "Lindbergh",
+    bounty: 316000000,
+    bountyText: "316,000,000",
+    aliases: ["lindbergh"]
+  },
+  {
+    id: "charlotte_daifuku",
+    name: "Charlotte Daifuku, Charlotte Oven et Ceasar Clown",
+    bounty: 300000000,
+    bountyText: "300,000,000",
+    aliases: ["daifuku", "charlotte daifuku", "oven", "charlotte oven", "ceasar", "ceasar clown", "clown"]
+  },
+  {
+    id: "ulti",
+    name: "Ulti et Karasu",
+    bounty: 400000000,
+    bountyText: "400,000,000",
+    aliases: ["ulti", "karasu"]
   }
 ];
