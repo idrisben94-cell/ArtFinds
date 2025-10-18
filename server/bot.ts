@@ -17,23 +17,18 @@ function getRandomCharacter(): OnePieceCharacter {
 
 function normalizeAnswer(answer: string): string {
   return answer.toLowerCase().trim()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function checkAnswer(answer: string, character: OnePieceCharacter): boolean {
   const normalized = normalizeAnswer(answer);
-  if (normalizeAnswer(character.name) === normalized) {
-    return true;
-  }
+  if (normalizeAnswer(character.name) === normalized) return true;
   return character.aliases.some(alias => normalizeAnswer(alias) === normalized);
 }
 
 export async function startBot() {
   const token = process.env.DISCORD_BOT_TOKEN;
-
-  if (!token) {
-    throw new Error('DISCORD_BOT_TOKEN non configuré. Veuillez ajouter votre token de bot Discord.');
-  }
+  if (!token) throw new Error('DISCORD_BOT_TOKEN non configuré. Veuillez ajouter votre token de bot Discord.');
 
   const client = new Client({
     intents: [
@@ -68,10 +63,8 @@ export async function startBot() {
     ].map(command => command.toJSON());
 
     const rest = new REST({ version: '10' }).setToken(token);
-
     try {
       console.log('🔄 Enregistrement des commandes slash...');
-
       if (client.application) {
         await rest.put(
           Routes.applicationCommands(client.application.id),
@@ -84,7 +77,7 @@ export async function startBot() {
     }
   });
 
-  // === Handle / Commands ===
+  // === Handle / commands ===
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
     const userId = interaction.user.id;
@@ -111,7 +104,6 @@ export async function startBot() {
         attempts: 0,
         startTime: Date.now()
       };
-
       await storage.createGameSession(session);
 
       const embed = new EmbedBuilder()
@@ -128,21 +120,15 @@ export async function startBot() {
     if (interaction.commandName === 'abandon') {
       const session = await storage.getGameSession(userId, channelId);
       if (!session) {
-        await interaction.reply({
-          content: '❌ Tu n\'as pas de partie en cours !',
-          ephemeral: true
-        });
+        await interaction.reply({ content: '❌ Tu n\'as pas de partie en cours !', ephemeral: true });
         return;
       }
 
       let userScore = await storage.getUserScore(userId);
-      if (!userScore) {
-        userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
-      }
+      if (!userScore) userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
       userScore.totalGames++;
       userScore.username = username;
       await storage.updateUserScore(userScore);
-
       await storage.deleteGameSession(userId, channelId);
 
       const embed = new EmbedBuilder()
@@ -161,10 +147,7 @@ export async function startBot() {
       if (type === 'me') {
         const userScore = await storage.getUserScore(userId);
         if (!userScore || userScore.totalGames === 0) {
-          await interaction.reply({
-            content: '📊 Tu n\'as pas encore joué ! Utilise `/prime` pour commencer.',
-            ephemeral: true
-          });
+          await interaction.reply({ content: '📊 Tu n\'as pas encore joué ! Utilise `/prime` pour commencer.', ephemeral: true });
           return;
         }
 
@@ -181,10 +164,7 @@ export async function startBot() {
       } else {
         const topScores = await storage.getTopScores(10);
         if (topScores.length === 0) {
-          await interaction.reply({
-            content: '📊 Aucun score pour le moment ! Soyez le premier à jouer !',
-            ephemeral: true
-          });
+          await interaction.reply({ content: '📊 Aucun score pour le moment ! Soyez le premier à jouer !', ephemeral: true });
           return;
         }
 
@@ -218,19 +198,13 @@ export async function startBot() {
 
     if (checkAnswer(message.content, session.currentCharacter)) {
       const timeTaken = Date.now() - session.startTime;
-
       let userScore = await storage.getUserScore(userId);
-      if (!userScore) {
-        userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
-      }
+      if (!userScore) userScore = { userId, username, correctGuesses: 0, totalGames: 0 };
 
       userScore.correctGuesses++;
       userScore.totalGames++;
       userScore.username = username;
-
-      if (!userScore.fastestTime || timeTaken < userScore.fastestTime) {
-        userScore.fastestTime = timeTaken;
-      }
+      if (!userScore.fastestTime || timeTaken < userScore.fastestTime) userScore.fastestTime = timeTaken;
 
       await storage.updateUserScore(userScore);
       await storage.deleteGameSession(userId, channelId);
@@ -250,12 +224,9 @@ export async function startBot() {
     } else {
       const hintsThreshold = [2, 4, 5];
       let hint = '';
-
-      if (session.attempts === hintsThreshold[0]) {
-        hint = `💡 Indice : Le nom du personnage contient ${session.currentCharacter.name.length} lettres.`;
-      } else if (session.attempts === hintsThreshold[1]) {
-        hint = `💡 Indice : Le nom commence par "${session.currentCharacter.name[0]}".`;
-      } else if (session.attempts === hintsThreshold[2]) {
+      if (session.attempts === hintsThreshold[0]) hint = `💡 Indice : Le nom du personnage contient ${session.currentCharacter.name.length} lettres.`;
+      else if (session.attempts === hintsThreshold[1]) hint = `💡 Indice : Le nom commence par "${session.currentCharacter.name[0]}".`;
+      else if (session.attempts === hintsThreshold[2]) {
         const parts = session.currentCharacter.name.split(' ');
         hint = `💡 Indice : Le nom contient ${parts.length} mot${parts.length > 1 ? 's' : ''}.`;
       }
@@ -275,4 +246,9 @@ export async function startBot() {
   await client.login(token);
   return client;
 }
+
+// === Lancement du bot ===
+startBot().catch(err => {
+  console.error('Erreur lors du démarrage du bot :', err);
+});
 
