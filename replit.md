@@ -23,11 +23,13 @@ Bot Discord de mini-jeux basé sur One Piece. Le bot propose un jeu où les util
 - Après 7 tentatives : Nombre de mots dans le nom
 
 ### Personnages inclus
-Le bot contient 20 personnages de One Piece avec leurs primes officielles :
-- Équipage du Chapeau de Paille (Luffy, Zoro, Sanji, etc.)
-- Empereurs (Kaido, Big Mom, Shanks, Barbe Noire)
-- Corsaires (Mihawk, Hancock, Crocodile, Buggy)
-- Autres pirates importants (Law, Kid)
+Le bot contient 50 personnages de One Piece avec leurs primes officielles :
+- Équipage du Chapeau de Paille (Luffy, Zoro, Sanji, Nami, Usopp, Robin, Franky, Brook, Chopper, Jinbe)
+- Empereurs et légendes (Kaido, Big Mom, Shanks, Barbe Noire, Barbe Blanche, Gol D. Roger)
+- Corsaires (Mihawk, Hancock, Crocodile, Buggy, Doflamingo, Kuma, Moria)
+- Supernovas (Law, Kid, Killer, Bege, Bonney, Hawkins, Apoo, Drake, Bartolomeo, Cavendish)
+- Commandants (Katakuri, King, Queen, Jack, Marco, Ace, Sabo)
+- Autres personnages importants (Rayleigh, Yamato, Oden, Smoker, Perona, Bepo, Carrot, Vivi, Benn Beckman)
 
 ## Architecture technique
 
